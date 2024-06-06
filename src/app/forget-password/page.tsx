@@ -1,42 +1,42 @@
-"use client";
-import React, { SyntheticEvent, useState } from "react";
-import { useSignIn } from "@clerk/nextjs";
-import type { NextPage } from "next";
-import Link from "next/link";
+"use client"
+import React, { SyntheticEvent, useState } from "react"
+import { useSignIn } from "@clerk/nextjs"
+import type { NextPage } from "next"
+import Link from "next/link"
 
 const ForgetPassword: NextPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [code, setCode] = useState("");
-  const [successfulCreation, setSuccessfulCreation] = useState(false);
-  const [complete, setComplete] = useState(false);
-  const [secondFactor, setSecondFactor] = useState(false);
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [code, setCode] = useState("")
+  const [successfulCreation, setSuccessfulCreation] = useState(false)
+  const [complete, setComplete] = useState(false)
+  const [secondFactor, setSecondFactor] = useState(false)
 
-  const { isLoaded, signIn, setActive } = useSignIn();
+  const { isLoaded, signIn, setActive } = useSignIn()
 
   if (!isLoaded) {
-    return null;
+    return null
   }
 
   async function create(e: any) {
-    e.preventDefault();
+    e.preventDefault()
 
-    const email = e.target[0].value;
+    const email = e.target[0].value
     await signIn
       ?.create({
         strategy: "reset_password_email_code",
         identifier: email,
       })
       .then((_) => {
-        setSuccessfulCreation(true);
+        setSuccessfulCreation(true)
       })
-      .catch((err) => console.error("error", err.errors[0].longMessage));
+      .catch((err) => console.error("error", err.errors[0].longMessage))
   }
 
   async function reset(e: any) {
-    e.preventDefault();
-    const password = e.target[0].value;
-    const code = e.target[1].value;
+    e.preventDefault()
+    const password = e.target[0].value
+    const code = e.target[1].value
 
     await signIn
       ?.attemptFirstFactor({
@@ -46,37 +46,27 @@ const ForgetPassword: NextPage = () => {
       })
       .then((result) => {
         if (result.status === "needs_second_factor") {
-          setSecondFactor(true);
+          setSecondFactor(true)
         } else if (result.status === "complete") {
-          setActive({ session: result.createdSessionId });
-          setComplete(true);
+          setActive({ session: result.createdSessionId })
+          setComplete(true)
         } else {
-          console.log(result);
+          console.log(result)
         }
       })
-      .catch((err) => console.error("error", err.errors[0].longMessage));
+      .catch((err) => console.error("error", err.errors[0].longMessage))
   }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="bg-[#212121] p-8 rounded shadow-md w-96">
-        <h1 className="text-4xl text-center font-semibold mb-8">
-          {successfulCreation && !complete ? "New Password" : "Forgot Password"}
-        </h1>
+        <h1 className="text-4xl text-center font-semibold mb-8">{successfulCreation && !complete ? "New Password" : "Forgot Password"}</h1>
         <form onSubmit={!successfulCreation ? create : reset}>
           {!successfulCreation && !complete && (
             <>
-              <input
-                type="email"
-                className="w-full border border-gray-300 text-black rounded px-3 py-2 mb-4 focus:outline-none focus:border-blue-400 focus:text-black"
-                placeholder="Email"
-                required
-              />
+              <input type="email" className="w-full border border-gray-300 text-black rounded px-3 py-2 mb-4 focus:outline-none focus:border-blue-400 focus:text-black" placeholder="Email" required />
 
-              <button
-                type="submit"
-                className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-              >
+              <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
                 {" "}
                 Submit
               </button>
@@ -84,23 +74,10 @@ const ForgetPassword: NextPage = () => {
           )}
           {successfulCreation && !complete && (
             <>
-              <input
-                type="password"
-                className="w-full border border-gray-300 text-black rounded px-3 py-2 mb-4 focus:outline-none focus:border-blue-400 focus:text-black"
-                placeholder="New Password"
-                required
-              />
-              <input
-                type="text"
-                className="w-full border border-gray-300 text-black rounded px-3 py-2 mb-4 focus:outline-none focus:border-blue-400 focus:text-black"
-                placeholder="Code"
-                required
-              />
+              <input type="password" className="w-full border border-gray-300 text-black rounded px-3 py-2 mb-4 focus:outline-none focus:border-blue-400 focus:text-black" placeholder="New Password" required />
+              <input type="text" className="w-full border border-gray-300 text-black rounded px-3 py-2 mb-4 focus:outline-none focus:border-blue-400 focus:text-black" placeholder="Code" required />
 
-              <button
-                type="submit"
-                className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-              >
+              <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
                 {" "}
                 Submit
               </button>
@@ -111,7 +88,7 @@ const ForgetPassword: NextPage = () => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ForgetPassword;
+export default ForgetPassword

@@ -1,11 +1,12 @@
-import React from "react";
-import Link from "next/link";
-import { UserButton, auth, useAuth } from "@clerk/nextjs";
+import React from "react"
+import Link from "next/link"
+import { UserButton, useAuth } from "@clerk/nextjs"
+import { auth } from "@clerk/nextjs/server"
 
 const Navbar = async () => {
   // const { isLoaded, userId, sessionId, getToken } = useAuth();
-  const { userId } = await auth();
-  const isAuth = !!userId;
+  const { userId } = await auth()
+  const isAuth = !!userId
 
   return (
     <div>
@@ -38,7 +39,7 @@ const Navbar = async () => {
         </div>
       </ul>
     </div>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar
